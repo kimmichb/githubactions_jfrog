@@ -37,12 +37,12 @@ jobs:
     - name: Print the image ID
       run: echo "Image ID is ${{ steps.image-id.outputs.image_id }}"
 
-    - name: Login to JFROG Artifactory
-      uses: azure/docker-login@v1
+    - name: Login to JFrog 
+      uses: docker/login-action@v1
       with:
-        login-server: acrreddittoastdev.azurecr.io
-        username: ${{ secrets.AZURE_ACR_USERNAME }}
-        password: ${{ secrets.AZURE_ACR_PASSWORD }}
+        registry: trialbrlbjt.jfrog.io
+        username: ${{ secrets.JFROG_USER_WRITER }}
+        password: ${{ secrets.JFROG_PASSWORD_WRITER }}
 
     - name: Tag image for ACR
       run: docker tag nginxinc/nginx-unprivileged:stable-bookworm-perl acrreddittoastdev.azurecr.io/nginx-unprivileged:stable-bookworm-perl
