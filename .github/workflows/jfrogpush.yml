@@ -32,7 +32,7 @@ jobs:
     - name: get image ID
       run: IMAGE_ID=$(sudo docker images --filter=reference=ubuntu:22.04 --format "{{.ID}}")
 
-    - name list image ID
+    - name: list image ID
       run: echo $IMAGE_ID
 
     - name: Login to JFROG Artifactory
