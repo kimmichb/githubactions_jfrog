@@ -25,7 +25,7 @@ jobs:
 
     - name: Pull image from Docker Hub
       # run: docker image pull ubuntu:22.04
-      docker pull hashicorp/packer
+      run: docker pull hashicorp/packer
 
     - name: list images
       run: docker image ls
@@ -46,7 +46,7 @@ jobs:
         username: ${{ secrets.JFROG_USER_WRITER }}
         password: ${{ secrets.JFROG_PASSWORD_WRITER }}
 
-    - name: Tag image for Ubuntu 22.04
+    - name: Tag image for hashicorp/packer # Ubuntu 22.04
       # run: docker tag ${{ steps.image-id.outputs.image_id }} trialbrlbjt.jfrog.io/cr-docker/ubuntu:22.04
       run: docker tag ${{ steps.image-id.outputs.image_id }} trialbrlbjt.jfrog.io/cr-docker/hashicorp/packer
 
