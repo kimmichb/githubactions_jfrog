@@ -29,11 +29,13 @@ jobs:
     - name: list images
       run: docker image ls
 
-    - name: get image ID
-      run: IMAGE_ID=$(sudo docker images --filter=reference=ubuntu:22.04 --format "{{.ID}}")
-
-    - name: list image ID
-      run: echo $IMAGE_ID
+    - name: Image ID
+      id: image-id
+      uses: s3vt/docker-image-id@v1.0.0
+      with:
+        image_name: "ubuntu:22.04"
+    - name: Print the image ID
+      run: echo "Image ID is ${{ steps.image-id.outputs.image_id }}"
 
     - name: Login to JFROG Artifactory
       uses: azure/docker-login@v1
