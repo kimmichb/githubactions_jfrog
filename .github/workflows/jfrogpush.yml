@@ -17,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    # - name: Checkout repository
+    #  uses: actions/checkout@v2
 
     - name: Login to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
@@ -29,7 +29,13 @@ jobs:
     - name: list images
       run: docker image ls
 
-    - name: Login to Azure Container Registry
+    - name: get image ID
+      run: IMAGE_ID=$(sudo docker images --filter=reference=ubuntu:22.04 --format "{{.ID}}")
+
+    - name list image ID
+      run: echo $IMAGE_ID
+
+    - name: Login to JFROG Artifactory
       uses: azure/docker-login@v1
       with:
         login-server: acrreddittoastdev.azurecr.io
