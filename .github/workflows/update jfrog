@@ -1,0 +1,40 @@
+name: Push To JFROG
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+      environment:
+        description: 'Environment to deploy'
+        required: false
+        default: 'prod'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+    - name: Pull image from Docker Hub
+      run: docker pull nginxinc/nginx-unprivileged:stable-bookworm-perl
+
+    - name: Login to Azure Container Registry
+      uses: azure/docker-login@v1
+      with:
+        login-server: acrreddittoastdev.azurecr.io
+        username: ${{ secrets.AZURE_ACR_USERNAME }}
+        password: ${{ secrets.AZURE_ACR_PASSWORD }}
+
+    - name: Tag image for ACR
+      run: docker tag nginxinc/nginx-unprivileged:stable-bookworm-perl acrreddittoastdev.azurecr.io/nginx-unprivileged:stable-bookworm-perl
+
+    - name: Push image to ACR
+      run: docker push acrreddittoastdev.azurecr.io/nginx-unprivileged:stable-bookworm-perl
